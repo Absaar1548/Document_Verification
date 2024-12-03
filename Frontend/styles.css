@@ -1,0 +1,56 @@
+/* Overall container for the content */
+.container {
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+/* 
+Styling for Account details and Signature blocks */
+/* .info-block, .signature-block, .results-block {
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+} */
+
+/* Styling for result texts */
+.matched {
+    color: green;
+    font-weight: bold;
+}
+
+.not-matched {
+    color: red;
+    font-weight: bold;
+}
+
+.distance {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Styling for images */
+.signature-block img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Add some spacing between the header and content */
+header {
+    margin-bottom: 10px;
+}
+
+/* Add custom spacing and styles for columns */
+.stColumns .block-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Make sure the text and header styles align properly */
+h1, h2, h3, h4 {
+    font-weight: bold;
+    color: #333;
+}
