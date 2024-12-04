@@ -10,6 +10,8 @@ from Backend.utils.load_models import load_verfication_model, load_cleaning_mode
 import cv2 as cv
 from PIL import Image
 import io
+import re
+import pytesseract
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -81,9 +83,12 @@ async def verify_document(file: UploadFile = File(...)):
         # Step 3: Process account_no and signature
 
         ## OCR for account_no
+        
         account_img = cv.imread(account_no_image)  # Using OpenCV to read the image
-        account_no = models["ocr"].readtext(account_img, detail=0)[0]  # Simplified OCR usage
-        account_no = account_no.replace(" ","")
+        account_no = pytesseract.image_to_string(account_img, config='outputbase digits')
+        # account_no = models["ocr"].readtext(account_img, detail=0)[0]  # Simplified OCR usage
+        account_no = re.sub(r"[^\d]", "", account_no)
+
         print("OCR Completed")
         print("Account Number: ", account_no)
 

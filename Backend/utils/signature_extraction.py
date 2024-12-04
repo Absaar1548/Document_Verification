@@ -1,21 +1,5 @@
 import os
-from PIL import Image, ImageOps
 import torch
-<<<<<<< HEAD
-from torchvision.transforms import v2, InterpolationMode
-from Models.Verfication.src.models.cnn import MODELS
-import cv2 as cv
-
-transforms = [
-    v2.ToImage(),
-    v2.ToDtype(torch.float32, scale=True),
-    v2.Resize(232, interpolation=InterpolationMode.BICUBIC, antialias=True),
-    v2.CenterCrop(224),
-    v2.Normalize(mean=[0.5], std=[0.5])
-]
-
-transforms = v2.Compose(transforms)
-=======
 import cv2 as cv
 from torchvision.transforms import functional as F
 from Models.Verfication.src.models.cnn import MODELS
@@ -28,7 +12,6 @@ transform = v2.Compose([
     v2.CenterCrop(224),
     v2.Normalize(mean=[0.5], std=[0.5])
 ])
->>>>>>> 98d4f7bd5dfb7507ccf16f1d3a8c0abd8888d2ad
 
 def preprocess_image(image_path: str, resize: tuple = (224, 224)):
     """
@@ -44,13 +27,6 @@ def preprocess_image(image_path: str, resize: tuple = (224, 224)):
     """
     try:
         # Load and invert the image
-<<<<<<< HEAD
-        image = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
-        image = cv.threshold(image, 127, 255, cv.THRESH_BINARY_INV)[1]
-        image = transforms(image)
-        return image
-    
-=======
         # image = Image.open(image_path).convert("L")
         # image = ImageOps.invert(image)
 
@@ -59,7 +35,6 @@ def preprocess_image(image_path: str, resize: tuple = (224, 224)):
 
         # Apply transformations: resize and normalize
         return transform(image)
->>>>>>> 98d4f7bd5dfb7507ccf16f1d3a8c0abd8888d2ad
     except Exception as e:
         print(f"Error processing image {image_path}: {e}")
         return None
@@ -120,12 +95,13 @@ def match_signature(cleaned_signature: str, folder_path: str, verification_model
 
     # Iterate over all files in the folder
     for file_name in os.listdir(folder_path):
-        if file_name.lower().endswith(('.png', '.jpg', '.jpeg')):  # Case insensitive file extension matching
+        if file_name.lower().endswith(('.png', '.jpg', '.jpeg' , 'tif')):  # Case insensitive file extension matching
             original_signature_path = os.path.join(folder_path, file_name)
             
             # Use the predict function to get the distance between the cleaned signature and the current original signature
             try:
                 distance = predict(cleaned_signature, original_signature_path, verification_model, device)
+                print("Distance : " ,distance)
                 distances.append(distance.item())  # Append the distance value to the list
             except ValueError as e:
                 print(e)
@@ -138,11 +114,12 @@ def match_signature(cleaned_signature: str, folder_path: str, verification_model
     # Calculate majority vote for matching: distance < threshold means a match
     matches = [dist < distance_threshold for dist in distances]
 
+    print("Matching Completed")
     # The final verification status is True if most distances are below the threshold
-    verification_status = sum(matches) > len(matches) / 2  # Majority voting rule
+    verification_status = sum(matches) > 1  # Majority voting rule
     
     # Calculate the average distance
-    average_distance = sum(distances) / len(distances)
+    average_distance = sum(dist < distance_threshold for dist in distances) / sum(matches)
     
     # Return the verification status and the average distance
     return verification_status, average_distance
