@@ -85,8 +85,8 @@ async def verify_document(file: UploadFile = File(...)):
         ## OCR for account_no
         
         account_img = cv.imread(account_no_image)  # Using OpenCV to read the image
-        account_no = pytesseract.image_to_string(account_img, config='outputbase digits')
-        # account_no = models["ocr"].readtext(account_img, detail=0)[0]  # Simplified OCR usage
+        # account_no = pytesseract.image_to_string(account_img, config='outputbase digits')
+        account_no = models["ocr"].readtext(account_img, detail=0)[0]  # Simplified OCR usage
         account_no = re.sub(r"[^\d]", "", account_no)
 
         print("OCR Completed")
