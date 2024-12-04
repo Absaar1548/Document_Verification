@@ -22,7 +22,7 @@ st.header('Document Verification System')
 # Create a container for the file uploader and image preview
 with st.container():
     # File uploader
-    uploaded_file = st.file_uploader("Choose a file", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader("Choose a file", type=["jpg", "jpeg", "png" , "tif"])
     
     # Display the uploaded image
     if uploaded_file is not None:
@@ -30,13 +30,8 @@ with st.container():
         image = Image.open(uploaded_file)
         st.image(image, caption='Uploaded Image', width=300)
 
-        # Reset file pointer before reading
         uploaded_file.seek(0)  # Reset file pointer to the start
-        
-        # Read the file as bytes
         img_bytes = uploaded_file.read()
-        
-        # Reset file pointer again for stream handling
         uploaded_file.seek(0)
         
         # Define the API endpoint

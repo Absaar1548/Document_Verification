@@ -2,6 +2,7 @@ import cv2 as cv
 import os
 
 def extract_components(image_path, model, save_dir='E:/Document Verfication/temp_images'):
+
     # Create the save directory if it doesn't exist
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -29,7 +30,7 @@ def extract_components(image_path, model, save_dir='E:/Document Verfication/temp
         print(f"Class: {class_name}, Shape: {cropped_obj.shape}")
         
         # Save the cropped object as a .png file
-        cropped_image_filename = f"{class_name}_{i}.png"  # Naming based on class and index
+        cropped_image_filename = f"extracted_{class_name}_{i}.png"  # Naming based on class and index
         cropped_image_path = os.path.join(save_dir, cropped_image_filename)
         
         # Save the cropped image

@@ -8,11 +8,14 @@ from Backend.utils.extraction import extract_components
 from Backend.utils.signature_extraction import clean_signature , match_signature
 from Backend.utils.load_models import load_verfication_model, load_cleaning_model
 import cv2 as cv
+from PIL import Image
+import io
 
 # Initialize FastAPI app
 app = FastAPI()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+
 # Declare global variables for all models
 models = {
     "yolo": None,
@@ -60,30 +63,31 @@ async def verify_document(file: UploadFile = File(...)):
     """
     try:
         # Step 1: Read and save the uploaded file
-            # Save the file with the original extension
-        file_extension = file.filename.split('.')[-1].lower()
-        temp_path = f"E:/Document Verfication/temp_images/temp_uploaded_image.{file_extension}"
         contents = await file.read()
-        with open(temp_path, "wb") as temp_file:
-            temp_file.write(contents)
+        image = Image.open(io.BytesIO(contents))
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        temp_path = "E:/Document Verfication/temp_images/temp_uploaded_image.png"
+        image.save(temp_path, format="PNG")
 
         # Step 2: Extract components using YOLO
         extracted_images = extract_components(temp_path, models["yolo"])
         if "account" not in extracted_images or "signature" not in extracted_images:
             return JSONResponse(content={"error": "Failed to extract account_no or signature"}, status_code=400)
-
-        # Step 3: Process account_no and signature
         account_no_image = extracted_images["account"]
         signature_image = extracted_images["signature"]
         print("Compnents Retreived")
 
-        # OCR for account_no
+        # Step 3: Process account_no and signature
+
+        ## OCR for account_no
         account_img = cv.imread(account_no_image)  # Using OpenCV to read the image
         account_no = models["ocr"].readtext(account_img, detail=0)[0]  # Simplified OCR usage
+        account_no = account_no.replace(" ","")
         print("OCR Completed")
         print("Account Number: ", account_no)
 
-        # Cleaning pipeline for signature
+        ## Cleaning pipeline for signature
         cleaned_signature = clean_signature(signature_image, models["signature_cleaning_pipeline"])
         print("Cleaning Completed")
 
