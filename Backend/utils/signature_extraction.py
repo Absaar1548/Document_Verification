@@ -1,8 +1,18 @@
 import os
 from PIL import Image, ImageOps
 import torch
+import cv2 as cv
 from torchvision.transforms import functional as F
 from Models.Verfication.src.models.cnn import MODELS
+from torchvision.transforms import v2, InterpolationMode
+
+transform = v2.Compose([
+    v2.ToImage(),
+    v2.ToDtype(torch.float32, scale=True),
+    v2.Resize((232,232), interpolation=InterpolationMode.BICUBIC),
+    v2.CenterCrop(224),
+    v2.Normalize(mean=[0.5], std=[0.5])
+])
 
 def preprocess_image(image_path: str, resize: tuple = (224, 224)):
     """
@@ -18,15 +28,14 @@ def preprocess_image(image_path: str, resize: tuple = (224, 224)):
     """
     try:
         # Load and invert the image
-        image = Image.open(image_path).convert("L")
-        image = ImageOps.invert(image)
+        # image = Image.open(image_path).convert("L")
+        # image = ImageOps.invert(image)
+
+        image = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
+        image = cv.threshold(image, 127, 255, cv.THRESH_BINARY_INV)[1]
 
         # Apply transformations: resize and normalize
-        image = F.resize(image, resize, interpolation=Image.BICUBIC)
-        image = F.to_tensor(image).float()
-        image = F.normalize(image, mean=[0.5], std=[0.5])
-
-        return image
+        return transform(image)
     except Exception as e:
         print(f"Error processing image {image_path}: {e}")
         return None

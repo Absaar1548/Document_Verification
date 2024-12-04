@@ -10,7 +10,7 @@ def extract_components(image_path, model, save_dir='E:/Document Verfication/temp
     results = model.predict(image_path)
     
     # Read the image in grayscale
-    image = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
+    image = cv.cvtColor(cv.imread(image_path), cv.COLOR_BGR2RGB)
     cropped_objects = {}
 
     # Loop through the results and crop the objects
