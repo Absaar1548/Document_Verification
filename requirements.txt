@@ -1,0 +1,8 @@
+streamlit
+fastapi
+pytorch
+uvicorn
+ultralytics
+easyocr
+pytorch
+python-multipart
