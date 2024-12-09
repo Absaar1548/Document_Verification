@@ -30,7 +30,7 @@ def extract_components(image_path, model, save_dir='temp_images'):
         print(f"Class: {class_name}, Shape: {cropped_obj.shape}")
         
         # Save the cropped object as a .png file
-        cropped_image_filename = f"extracted_{class_name}_{i}.png"  # Naming based on class and index
+        cropped_image_filename = f"extracted_{class_name}.png"  # Naming based on class and index
         cropped_image_path = os.path.join(save_dir, cropped_image_filename)
         
         # Save the cropped image

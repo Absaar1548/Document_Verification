@@ -1,4 +1,9 @@
 /Sample Images/IDRBT Cheque Image Dataset
 /Models/Verfication/Data
 /Dataset
+/temp_images/extracted_account.png
+/temp_images/extracted_amount.png
+/temp_images/extracted_reciever.png
+/temp_images/extracted_signature.png
+/temp_images/temp_uploaded_image.png
 .venv
