@@ -11,7 +11,6 @@ import cv2 as cv
 from PIL import Image
 import io
 import re
-import pytesseract
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -37,7 +36,7 @@ async def load_models():
     print(f"Device selected: {device}")
 
     # Load YOLO model on GPU
-    models["yolo"] = YOLO(r"Models\Extraction\weights\best.pt")  # Replace with your trained YOLO weights
+    models["yolo"] = YOLO(os.path.join(os.getcwd(), 'Models/Extraction/weights/best.pt'))  # Replace with your trained YOLO weights
     models["yolo"].to(device)  # Move YOLO model to GPU
     print("YOLO model loaded successfully on GPU!")
 
@@ -53,9 +52,8 @@ async def load_models():
     # Load verification model on GPU
     # Replace with your verification model's loading logic
     MODEL_NAME = "shufflenet"  # Example, change based on your model
-    MODEL_WEIGHTS_PATH = r"Models\Verfication\models\shufflenet_best.pth"
-    models["verification"] = load_verfication_model(model_name=MODEL_NAME,model_weights=
-                        MODEL_WEIGHTS_PATH,device= device)
+    MODEL_WEIGHTS_PATH = os.path.join(os.getcwd(), 'Models/Verfication/models/shufflenet_best.pth')
+    models["verification"] = load_verfication_model(model_name=MODEL_NAME, model_weights=MODEL_WEIGHTS_PATH, device= device)
     print("Verification model loaded successfully on GPU!")
 
 @app.post("/verify-document/")
