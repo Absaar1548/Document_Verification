@@ -6,4 +6,5 @@
 /temp_images/extracted_reciever.png
 /temp_images/extracted_signature.png
 /temp_images/temp_uploaded_image.png
+__pycache__
 .venv
