@@ -37,7 +37,7 @@ async def load_models():
     print(f"Device selected: {device}")
 
     # Load YOLO model on GPU
-    models["yolo"] = YOLO(r"E:\Document Verfication\Models\Extraction\weights\best.pt")  # Replace with your trained YOLO weights
+    models["yolo"] = YOLO(r"Models\Extraction\weights\best.pt")  # Replace with your trained YOLO weights
     models["yolo"].to(device)  # Move YOLO model to GPU
     print("YOLO model loaded successfully on GPU!")
 
@@ -53,7 +53,7 @@ async def load_models():
     # Load verification model on GPU
     # Replace with your verification model's loading logic
     MODEL_NAME = "shufflenet"  # Example, change based on your model
-    MODEL_WEIGHTS_PATH = r"E:\Document Verfication\Models\Verfication\models\shufflenet_best.pth"
+    MODEL_WEIGHTS_PATH = r"Models\Verfication\models\shufflenet_best.pth"
     models["verification"] = load_verfication_model(model_name=MODEL_NAME,model_weights=
                         MODEL_WEIGHTS_PATH,device= device)
     print("Verification model loaded successfully on GPU!")
@@ -69,7 +69,7 @@ async def verify_document(file: UploadFile = File(...)):
         image = Image.open(io.BytesIO(contents))
         if image.mode != "RGB":
             image = image.convert("RGB")
-        temp_path = "E:/Document Verfication/temp_images/temp_uploaded_image.png"
+        temp_path = r"temp_images\temp_uploaded_image.png"
         image.save(temp_path, format="PNG")
 
         # Step 2: Extract components using YOLO
@@ -97,7 +97,7 @@ async def verify_document(file: UploadFile = File(...)):
         print("Cleaning Completed")
 
         # Step 4: Match the signature
-        folder_path = f"E:/Document Verfication/Database/{account_no}/"
+        folder_path = f"Database/{account_no}/"
         if not os.path.exists(folder_path):
             return JSONResponse(content={"error": f"Account folder for {account_no} not found in database"}, status_code=404)
         verification_status, distance = match_signature(cleaned_signature, folder_path, models["verification"] , device=device)

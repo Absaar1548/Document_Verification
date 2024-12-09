@@ -1,7 +1,7 @@
 import cv2 as cv
 import os
 
-def extract_components(image_path, model, save_dir='E:/Document Verfication/temp_images'):
+def extract_components(image_path, model, save_dir='temp_images'):
 
     # Create the save directory if it doesn't exist
     if not os.path.exists(save_dir):

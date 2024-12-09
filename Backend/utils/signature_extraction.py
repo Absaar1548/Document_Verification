@@ -116,10 +116,10 @@ def match_signature(cleaned_signature: str, folder_path: str, verification_model
 
     print("Matching Completed")
     # The final verification status is True if most distances are below the threshold
-    verification_status = sum(matches) > 1  # Majority voting rule
+    verification_status = any(matches)  # Majority voting rule
     
     # Calculate the average distance
-    average_distance = sum(dist < distance_threshold for dist in distances) / sum(matches)
+    average_distance = sum(dist for dist in distances if dist < distance_threshold) / sum(matches)
     
     # Return the verification status and the average distance
     return verification_status, average_distance
